@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live E-Commerce Dashboard</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* A light gray background */
+        }
+        /* Custom scrollbar for a better look */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            padding: 1.5rem;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        .live-indicator {
+            width: 12px;
+            height: 12px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Header Section -->
+        <header class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">Live E-Commerce Dashboard</h1>
+                <p class="text-gray-500">Real-time sales and product analytics from SSMS</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <div class="live-indicator"></div>
+                    <span class="font-semibold text-red-600">LIVE</span>
+                </div>
+                <button id="exportBtn" class="bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-emerald-700 transition">
+                    Export to Excel (CSV)
+                </button>
+            </div>
+        </header>
+
+        <!-- Key Performance Indicators (KPIs) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="card">
+                <h3 class="text-gray-500 font-medium">Total Revenue</h3>
+                <p id="totalRevenue" class="text-3xl font-bold text-gray-800 mt-2">$0.00</p>
+            </div>
+            <div class="card">
+                <h3 class="text-gray-500 font-medium">Total Orders</h3>
+                <p id="totalOrders" class="text-3xl font-bold text-gray-800 mt-2">0</p>
+            </div>
+            <div class="card">
+                <h3 class="text-gray-500 font-medium">Average Order Value</h3>
+                <p id="avgOrderValue" class="text-3xl font-bold text-gray-800 mt-2">$0.00</p>
+            </div>
+             <div class="card">
+                <h3 class="text-gray-500 font-medium">Unique Customers</h3>
+                <p id="uniqueCustomers" class="text-3xl font-bold text-gray-800 mt-2">0</p>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
+            <!-- Left side charts -->
+            <div class="lg:col-span-3 grid grid-cols-1 gap-6">
+                 <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Monthly Sales Trend</h3>
+                    <!-- FIX: Added a container with relative position and height -->
+                    <div class="relative h-96">
+                        <canvas id="salesTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!-- Right side charts -->
+            <div class="lg:col-span-2 grid grid-cols-1 gap-6">
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Sales by Category</h3>
+                    <!-- FIX: Added a container with relative position and height -->
+                    <div class="relative h-72">
+                        <canvas id="categorySalesChart"></canvas>
+                    </div>
+                </div>
+                 <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Top Selling Products</h3>
+                    <!-- FIX: Added a container with relative position and height -->
+                    <div class="relative h-72">
+                        <canvas id="topProductsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Recent Orders Table -->
+        <div class="card">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">Live Orders Feed</h3>
+            <div class="overflow-y-auto h-80 custom-scrollbar">
+                <table class="w-full text-left">
+                    <thead class="sticky top-0 bg-white">
+                        <tr class="border-b">
+                            <th class="p-3 font-semibold text-gray-600">Order ID</th>
+                            <th class="p-3 font-semibold text-gray-600">Customer</th>
+                            <th class="p-3 font-semibold text-gray-600">Product</th>
+                            <th class="p-3 font-semibold text-gray-600">Category</th>
+                            <th class="p-3 font-semibold text-gray-600">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- 1. SETUP ---
+        const API_BASE_URL = 'http://127.0.0.1:5000/api';
+        let liveOrdersForExport = []; // Used only for the export button
+        
+        // Chart instances to prevent duplicates
+        let salesTrendChart, categorySalesChart, topProductsChart;
+
+        // --- 2. GENERIC FETCH FUNCTION ---
+        async function fetchData(endpoint) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/${endpoint}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`Could not fetch data from ${endpoint}:`, error);
+                return null; // Return null on error
+            }
+        }
+
+        // --- 3. DASHBOARD UPDATE FUNCTIONS ---
+
+        async function updateKPIs() {
+            const kpis = await fetchData('kpis');
+            if (!kpis) return;
+
+            document.getElementById('totalRevenue').textContent = `$${(kpis.TotalRevenue || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('totalOrders').textContent = (kpis.TotalOrders || 0).toLocaleString();
+            document.getElementById('avgOrderValue').textContent = `$${(kpis.AvgOrderValue || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('uniqueCustomers').textContent = (kpis.UniqueCustomers || 0).toLocaleString();
+        }
+
+        async function updateLiveOrdersTable() {
+            const orders = await fetchData('sales-data');
+            if (!orders) return;
+            liveOrdersForExport = orders; // Store for CSV export
+
+            const tableBody = document.getElementById('ordersTableBody');
+            tableBody.innerHTML = ''; // Clear existing rows
+            const recentOrders = orders.slice(0, 20); // API already sorts by newest
+
+            recentOrders.forEach(order => {
+                const row = document.createElement('tr');
+                row.className = 'border-b hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="p-3">${order.OrderID}</td>
+                    <td class="p-3">${order.CustomerName}</td>
+                    <td class="p-3">${order.ProductName}</td>
+                    <td class="p-3">${order.CategoryName}</td>
+                    <td class="p-3 font-medium text-gray-700">$${(parseFloat(order.Subtotal) || 0).toFixed(2)}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        async function updateAllCharts() {
+            // Fetch all chart data in parallel for speed
+            const [monthlyData, categoryData, productData] = await Promise.all([
+                fetchData('monthly-sales'),
+                fetchData('category-sales'),
+                fetchData('top-products')
+            ]);
+            
+            // Update each chart with its specific data
+            if (monthlyData) updateSalesTrendChart(monthlyData);
+            if (categoryData) updateCategorySalesChart(categoryData);
+            if (productData) updateTopProductsChart(productData);
+        }
+
+        // --- 4. CHART CREATION & UPDATE FUNCTIONS ---
+
+        function updateSalesTrendChart(data) {
+            const labels = data.map(item => item.OrderMonth);
+            const values = data.map(item => item.TotalSales);
+            const ctx = document.getElementById('salesTrendChart').getContext('2d');
+            
+            if (salesTrendChart) salesTrendChart.destroy();
+            
+            // Create a gradient for the fill
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.5)');
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+            salesTrendChart = new Chart(ctx, { 
+                type: 'line', 
+                data: { 
+                    labels, 
+                    datasets: [{ 
+                        label: 'Total Sales', 
+                        data: values, 
+                        borderColor: '#10b981',
+                        backgroundColor: gradient, // Use the gradient here
+                        fill: true, 
+                        tension: 0.4,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#10b981',
+                        pointHoverBackgroundColor: '#10b981',
+                        pointHoverBorderColor: '#fff',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }] 
+                }, 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false // Hide legend as it's self-explanatory
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: '#0f172a',
+                            titleColor: '#fff',
+                            bodyColor: '#cbd5e1',
+                            padding: 10,
+                            cornerRadius: 4,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                color: '#e5e7eb'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                } 
+            });
+        }
+        
+        function updateCategorySalesChart(data) {
+            const labels = data.map(item => item.CategoryName);
+            const values = data.map(item => item.TotalSales);
+            const ctx = document.getElementById('categorySalesChart').getContext('2d');
+
+            if (categorySalesChart) categorySalesChart.destroy();
+            categorySalesChart = new Chart(ctx, { type: 'doughnut', data: { labels, datasets: [{ label: 'Sales', data: values, backgroundColor: ['#3b82f6', '#f97316', '#8b5cf6'], hoverOffset: 4 }] }, options: { responsive: true, maintainAspectRatio: false } });
+        }
+
+        function updateTopProductsChart(data) {
+            const labels = data.map(item => item.ProductName);
+            const values = data.map(item => item.TotalSales);
+            const ctx = document.getElementById('topProductsChart').getContext('2d');
+
+            if (topProductsChart) topProductsChart.destroy();
+            topProductsChart = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: 'Total Sales', data: values, backgroundColor: '#6366f1' }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+        }
+
+        // --- 5. INITIALIZE AND SET INTERVAL FOR LIVE UPDATES ---
+        function updateAllData() {
+            console.log("Refreshing dashboard data...");
+            updateKPIs();
+            updateLiveOrdersTable();
+            updateAllCharts();
+        }
+
+        updateAllData(); // Initial load
+        setInterval(updateAllData, 5000); // Refresh every 5 seconds
+
+        // --- 6. EXPORT TO CSV FUNCTIONALITY ---
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            if (liveOrdersForExport.length === 0) {
+                alert("No data to export. Please wait for data to load.");
+                return;
+            }
+            let csvContent = "data:text/csv;charset=utf-8,";
+            const headers = Object.keys(liveOrdersForExport[0]).join(",");
+            csvContent += headers + "\r\n";
+            
+            liveOrdersForExport.forEach(order => {
+                const rowValues = Object.values(order).map(val => `"${String(val).replace(/"/g, '""')}"`).join(',');
+                csvContent += rowValues + "\r\n";
+            });
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "live_ecommerce_export.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+    });
+    </script>
+</body>
+</html>
