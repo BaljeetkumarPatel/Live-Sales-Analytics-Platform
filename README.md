@@ -68,6 +68,8 @@ This project is built with a classic three-tier architecture, separating the dat
 
 **Data Flow**
 
+![Data Flow](./screenshort/data-flow.png)
+
 The data flows in a simple, unidirectional path from the source to the presentation layer.
 
 `[ MS SQL Server Database ] → [ Python (Flask) API ] → [ Frontend (HTML, CSS, Chart.js) ]`
