@@ -1,7 +1,7 @@
-E-Commerce Data Analytics Dashboard
+#E-Commerce Data Analytics Dashboard
 This project presents a full-stack, real-time data analytics dashboard for an e-commerce dataset. It demonstrates a complete data pipeline, starting from a structured SQL database, processed through a Python backend, and visualized on a dynamic, live-updating web interface.
 
-🚀 Dashboard Preview
+#🚀 Dashboard Preview
 The web dashboard provides a clean, at-a-glance overview of key business metrics and trends, pulling data directly from the database every 5 seconds.
 
 Live Dashboard Screenshot:
@@ -12,7 +12,7 @@ Exported Excel Report:
 
 (Your screenshot of the exported .csv file opened in Excel will appear here)
 
-✨ Core Features
+#✨ Core Features
 Real-Time Analytics: All KPIs and charts refresh automatically every 5 seconds to reflect the latest data from the database.
 
 Live Database Connection: A Python Flask backend serves as a robust API bridge to the Microsoft SQL Server (SSMS) database.
@@ -41,7 +41,7 @@ Live Order Feed: A scrolling table that shows the 20 most recent order details a
 
 Export to Excel: A one-click button to download the current raw order data as a .csv file, ready for offline analysis in Excel.
 
-🛠️ Technology Stack & Architecture
+#🛠️ Technology Stack & Architecture
 This project is built with a classic three-tier architecture, separating the database, server logic, and user interface.
 
 Database:
