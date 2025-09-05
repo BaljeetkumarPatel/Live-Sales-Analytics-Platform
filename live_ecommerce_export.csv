@@ -1,0 +1,21 @@
+CategoryName,City,CustomerID,CustomerName,OrderDate,OrderID,ProductID,ProductName,Quantity,Subtotal
+Books,Fort Worth,113,Mike Young,"Mon, 11 Aug 2025 00:00:00 GMT",14,2003,Harry Potter,1,45
+Beauty,Jacksonville,112,Laura Allen,"Sun, 10 Aug 2025 00:00:00 GMT",13,9001,Perfume,1,60
+Clothing,Austin,111,Kevin Hall,"Sat, 09 Aug 2025 00:00:00 GMT",12,3003,Jacket,2,240
+Groceries,Austin,111,Kevin Hall,"Sat, 09 Aug 2025 00:00:00 GMT",12,8001,Rice 10kg,1,10
+Home Appliances,San Jose,110,Julia Walker,"Sat, 09 Aug 2025 00:00:00 GMT",11,4002,Washing Machine,1,500
+Sports,Dallas,109,Ian Clark,"Fri, 08 Aug 2025 00:00:00 GMT",10,5001,Football,2,70
+Sports,Dallas,109,Ian Clark,"Fri, 08 Aug 2025 00:00:00 GMT",10,5002,Tennis Racket,1,65
+Furniture,San Diego,108,Hannah Lee,"Fri, 08 Aug 2025 00:00:00 GMT",9,6001,Sofa,1,900
+Clothing,San Antonio,107,Grace Martinez,"Thu, 07 Aug 2025 00:00:00 GMT",8,3002,Jeans,1,75
+Electronics,Philadelphia,106,Frank Anderson,"Thu, 07 Aug 2025 00:00:00 GMT",7,1003,Headphones,1,150
+Toys,Phoenix,105,Eva Taylor,"Wed, 06 Aug 2025 00:00:00 GMT",6,7001,Toy Car,2,40
+Toys,Phoenix,105,Eva Taylor,"Wed, 06 Aug 2025 00:00:00 GMT",6,7002,Doll,1,25
+Home Appliances,Houston,104,David Wilson,"Wed, 06 Aug 2025 00:00:00 GMT",5,4001,Microwave Oven,1,220
+Electronics,Chicago,103,Charlie Brown,"Tue, 05 Aug 2025 00:00:00 GMT",4,1002,Smartphone,1,800
+Books,New York,101,Alice Smith,"Tue, 05 Aug 2025 00:00:00 GMT",3,2002,Data Science Intro,2,90
+Clothing,New York,101,Alice Smith,"Tue, 05 Aug 2025 00:00:00 GMT",3,3001,T-Shirt,1,25
+Electronics,Los Angeles,102,Bob Johnson,"Sun, 03 Aug 2025 00:00:00 GMT",2,1002,Smartphone,1,800
+Clothing,Los Angeles,102,Bob Johnson,"Sun, 03 Aug 2025 00:00:00 GMT",2,3001,T-Shirt,1,25
+Electronics,New York,101,Alice Smith,"Fri, 01 Aug 2025 00:00:00 GMT",1,1001,Laptop,1,1200
+Books,New York,101,Alice Smith,"Fri, 01 Aug 2025 00:00:00 GMT",1,2001,The Great Gatsby,1,15
