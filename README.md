@@ -167,10 +167,10 @@ r'SERVER=YOUR_SERVER_NAME;' # <-- CHANGE THIS
 ## Screenshots
 
 - Live Dashboard Screenshot:
-![Dashboard Preview](./screenshorts/sc-1.png)
-![Dashboard Preview](./screenshorts/sc-2.png)
-![Dashboard Preview](./screenshorts/sc-3.png)
-![Dashboard Preview](./screenshorts/sc-4.png)
+![Dashboard Preview](./screenshort/sc-1.png)
+![Dashboard Preview](./screenshort/sc-2.png)
+![Dashboard Preview](./screenshort/sc-3.png)
+![Dashboard Preview](./screenshort/sc-4.png)
 
 -Exported Excel Report:
 
